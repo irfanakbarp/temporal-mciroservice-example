@@ -8,12 +8,12 @@ import (
 
 // Make temporal client
 func NewTemporalClient() client.Client {
-	c, err := client.NewClient(client.Options{
-		HostPort:  "localhost:7233",
+	c, err := client.Dial(client.Options{
+		HostPort:  "127.0.0.1:7233",
 		Namespace: "default",
 	})
 	if err != nil {
-		log.Fatalln("Unable to create Temporal client:", err)
+		log.Fatalln("Unable to create Temporal client 1:", err)
 	}
 	return c
 }

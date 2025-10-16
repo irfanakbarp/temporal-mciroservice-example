@@ -8,27 +8,25 @@ import (
 	"os"
 )
 
-type ContactActivity struct {
+type LogActivity struct {
 	BaseURL string
 }
 
-func NewContactActivity() *ContactActivity {
+func NewLoggingActivity() *LogActivity {
 	base := os.Getenv("LOGGING_SVC_URL")
 	if base == "" {
 		panic("LOGGING_SVC_URL is missing in environment")
 	}
-	return &ContactActivity{BaseURL: base}
+	return &LogActivity{BaseURL: base}
 }
 
-func (a *ContactActivity) CreateContactLogging(log LogActivities) error {
-	body, err := json.Marshal(log)
+func (a *LogActivity) CreateContactLogging(data any) error {
+	body, err := json.Marshal(data)
 	if err != nil {
-		return err
+		return fmt.Errorf("failed to marshal log data: %w", err)
 	}
 
-	//
-	url := a.BaseURL + "/logs"
-
+	url := a.BaseURL + "/logs/"
 	resp, err := http.Post(url, "application/json", bytes.NewBuffer(body))
 	if err != nil {
 		return fmt.Errorf("failed to call log service: %w", err)

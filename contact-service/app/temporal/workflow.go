@@ -20,7 +20,7 @@ func (w *ContactWorkflow) ContactWorkflow(ctx workflow.Context, log LogActivitie
 			InitialInterval:    10 * time.Second,
 			BackoffCoefficient: 1.0,
 			MaximumInterval:    10 * time.Second,
-			MaximumAttempts:    100,
+			MaximumAttempts:    10,
 		},
 	}
 
@@ -28,7 +28,7 @@ func (w *ContactWorkflow) ContactWorkflow(ctx workflow.Context, log LogActivitie
 	ctx = workflow.WithActivityOptions(ctx, ao)
 
 	// 🔁 Jalankan activity (misal nge-log ke log-service)
-	act := NewContactActivity()
+	act := NewLoggingActivity()
 	err := workflow.ExecuteActivity(ctx, act.CreateContactLogging, log).Get(ctx, nil)
 	if err != nil {
 		// bisa juga workflow logger

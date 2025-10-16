@@ -61,7 +61,6 @@ func (r *ContactController) CreateContact(ctx http.Context) http.Response {
 		defer temporalClient.Close()
 
 		workflowOptions := client.StartWorkflowOptions{
-			ID:        fmt.Sprintf("contact_log_workflow_%d", account.ID),
 			TaskQueue: temporal.ContactTaskQueue,
 		}
 
