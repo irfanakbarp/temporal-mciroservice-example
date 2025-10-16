@@ -70,7 +70,7 @@ func (r *ContactController) CreateContact(ctx http.Context) http.Response {
 			Action:        "created",
 		}
 
-		_, err := temporalClient.ExecuteWorkflow(ctx, workflowOptions, "ContactWorkflow", logDetails)
+		_, err := temporalClient.ExecuteWorkflow(ctx, workflowOptions, "ContactLoggingWorkflow", logDetails)
 		if err != nil {
 			fmt.Println("Failed to execute Temporal workflow:", err)
 		}
