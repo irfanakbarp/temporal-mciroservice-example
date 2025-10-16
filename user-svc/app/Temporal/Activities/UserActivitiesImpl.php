@@ -22,8 +22,9 @@ class UserActivitiesImpl implements UserActivitiesInterface
 
     public function createContact(array $userData): bool
     {
+        $baseUri = env('CONTACT_SERVICE_URL', 'http://)localhost:3001/api/contacts/');
         $client = new Client();
-        $response = $client->post('http://172.69.26.180:3000/api/v1/contact-svc/contacts', [
+        $response = $client->post($baseUri, [
             'json' => [
                 'name' => $userData['name'],
                 'email' => $userData['email'],
@@ -35,8 +36,9 @@ class UserActivitiesImpl implements UserActivitiesInterface
 
     public function createLog(string $action, string $referenceId, string $referenceName): bool
     {
+        $baseUri = env('LOG_SERVICE_URL', 'http://localhost:3002/api/logs/');
         $client = new Client();
-        $response = $client->post('http://172.69.193.199:3002/api/logs/', [
+        $response = $client->post($baseUri, [
             'json' => [
                 'action' => $action,
                 'reference_id' => $referenceId,
