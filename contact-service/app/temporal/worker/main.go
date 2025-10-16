@@ -33,8 +33,8 @@ func main() {
 	// 🧱 Register worker
 	w := worker.New(c, temporal.ContactTaskQueue, worker.Options{})
 
-	w.RegisterWorkflow(temporal.NewContactWorkflow().ContactWorkflow)
-	w.RegisterActivity(temporal.NewLoggingActivity().CreateContactLogging)
+	w.RegisterWorkflow(temporal.NewContactLoggingWorkflow().ContactLoggingWorkflow)
+	w.RegisterActivity(temporal.NewLoggingActivity().ContactLogging)
 
 	log.Println("✅ Temporal Worker started — waiting for tasks on:", temporal.ContactTaskQueue)
 
