@@ -80,10 +80,10 @@ WSGI_APPLICATION = 'log_svc.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'log-svc',
-        'USER': 'postgres',
-        'PASSWORD': 'yourpassword',
-        'HOST': '127.0.0.1',
+        'NAME': 'temporal-microservice',
+        'USER': 'adminsolutif',
+        'PASSWORD': '123qwe!@#QWE',
+        'HOST': '10.3.0.12',
         'PORT': '5432',
     }
 }
