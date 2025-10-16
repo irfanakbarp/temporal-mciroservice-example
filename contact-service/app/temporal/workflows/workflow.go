@@ -1,10 +1,11 @@
-package temporal
+package workflows
 
 import (
 	"time"
-
 	"go.temporal.io/sdk/temporal"
 	"go.temporal.io/sdk/workflow"
+	"goravel/app/temporal/activities"
+	"goravel/app/temporal/types"
 )
 
 type ContactLoggingWorkflow struct{}
@@ -13,7 +14,7 @@ func NewContactLoggingWorkflow() *ContactLoggingWorkflow {
 	return &ContactLoggingWorkflow{}
 }
 
-func (w *ContactLoggingWorkflow) ContactLoggingWorkflow(ctx workflow.Context, log LogActivities) error {
+func (w *ContactLoggingWorkflow) ContactLoggingWorkflow(ctx workflow.Context, log types.LogActivities) error {
 	ao := workflow.ActivityOptions{
 		StartToCloseTimeout: time.Second * 30,
 		RetryPolicy: &temporal.RetryPolicy{
@@ -24,15 +25,15 @@ func (w *ContactLoggingWorkflow) ContactLoggingWorkflow(ctx workflow.Context, lo
 		},
 	}
 
-	// Apply ke context workflow
+	// Apply to workflow context
 	ctx = workflow.WithActivityOptions(ctx, ao)
 
-	// 🔁 Jalankan activity (misal nge-log ke log-service)
-	act := NewLoggingActivity()
+	// Run activity 
+	act := activities.NewLoggingActivity()
 	err := workflow.ExecuteActivity(ctx, act.ContactLogging, log).Get(ctx, nil)
 	if err != nil {
 		// bisa juga workflow logger
-		workflow.GetLogger(ctx).Error("Activity gagal", "error", err)
+		workflow.GetLogger(ctx).Error("Activity failed", "error", err)
 		return err
 	}
 

@@ -7,6 +7,7 @@ import (
 	"goravel/app/http/requests/contacts"
 	"goravel/app/models"
 	"goravel/app/temporal"
+	"goravel/app/temporal/types"
 	"goravel/app/traits"
 
 	"github.com/goravel/framework/contracts/http"
@@ -61,10 +62,10 @@ func (r *ContactController) CreateContact(ctx http.Context) http.Response {
 		defer temporalClient.Close()
 
 		workflowOptions := client.StartWorkflowOptions{
-			TaskQueue: temporal.ContactTaskQueue,
+			TaskQueue: types.ContactTaskQueue,
 		}
 
-		logDetails := temporal.LogActivities{
+		logDetails := types.LogActivities{
 			ReferenceID:   account.ID,
 			ReferenceName: "contacts",
 			Action:        "created",

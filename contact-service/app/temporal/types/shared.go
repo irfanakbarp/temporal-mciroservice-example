@@ -1,4 +1,4 @@
-package temporal
+package types
 
 import "github.com/google/uuid"
 
