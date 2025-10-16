@@ -6,18 +6,30 @@ use App\Models\User;
 use App\Temporal\Workflows\UserWorkflowImpl;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 use Temporal\Client\GRPC\ServiceClient;
 use Temporal\Client\WorkflowClient;
 use Temporal\Client\WorkflowOptions;
 
 class UserController extends Controller
 {
-    public function create(Request $request) {
-        $validated = $request->validate([
+    public function create(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8',
         ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation failed',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        $validated = $validator->validated();
 
         $userData = [
             'name' => $validated['name'],
@@ -40,7 +52,7 @@ class UserController extends Controller
                 'workflow_id' => $run->getExecution()->getID(),
                 'run_id' => $run->getExecution()->getRunID(),
             ], 202);
-        }catch (\Exception $e) {
+        } catch (\Exception $e) {
             return response()->json([
                 'message' => 'Failed to start workflow',
                 'error' => $e->getMessage()

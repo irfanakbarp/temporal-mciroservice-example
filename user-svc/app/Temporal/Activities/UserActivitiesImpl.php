@@ -22,7 +22,7 @@ class UserActivitiesImpl implements UserActivitiesInterface
 
     public function createContact(array $userData): bool
     {
-        $baseUri = env('CONTACT_SERVICE_URL', 'http://)localhost:3001/api/contacts/');
+        $baseUri = env('CONTACT_SERVICE_URL', 'http://localhost:3000/api/contacts/');
         $client = new Client();
         $response = $client->post($baseUri, [
             'json' => [
