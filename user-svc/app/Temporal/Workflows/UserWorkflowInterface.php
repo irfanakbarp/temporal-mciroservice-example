@@ -2,6 +2,7 @@
 
 namespace App\Temporal\Workflows;
 
+use App\DTO\UserDTO;
 use Temporal\Workflow\WorkflowInterface;
 use Temporal\Workflow\WorkflowMethod;
 
@@ -9,5 +10,5 @@ use Temporal\Workflow\WorkflowMethod;
 interface UserWorkflowInterface
 {
     #[WorkflowMethod(name: "UserWorkflowImpl.run")]
-    public function run(array $userData);
+    public function run(UserDTO $userData);
 }

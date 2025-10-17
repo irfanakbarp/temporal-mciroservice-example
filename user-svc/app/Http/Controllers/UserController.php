@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\DTO\UserDTO;
 use App\Models\User;
 use App\Temporal\Workflows\UserWorkflowImpl;
 use Illuminate\Http\Request;
@@ -31,11 +32,17 @@ class UserController extends Controller
 
         $validated = $validator->validated();
 
-        $userData = [
+        $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
-        ];
+        ]);
+
+        $userDTO = new UserDTO(
+            id: $user->id,
+            name: $user->name,
+            email: $user->email
+        );
 
         try {
             $serviceClient = ServiceClient::create('localhost:7233');
@@ -45,9 +52,10 @@ class UserController extends Controller
                 WorkflowOptions::new()->withTaskQueue('user-task-queue')
             );
 
-            $run = $client->start($workflow, $userData);
+            $run = $client->start($workflow, $userDTO);
 
             return response()->json([
+                'user' => $user,
                 'message' => 'User creation workflow started',
                 'workflow_id' => $run->getExecution()->getID(),
                 'run_id' => $run->getExecution()->getRunID(),
