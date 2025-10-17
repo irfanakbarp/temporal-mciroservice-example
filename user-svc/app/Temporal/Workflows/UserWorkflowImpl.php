@@ -2,7 +2,7 @@
 
 namespace App\Temporal\Workflows;
 
-use Illuminate\Support\Facades\Log;
+use App\DTO\UserDTO;
 use Temporal\Activity\ActivityOptions;
 use Temporal\Common\RetryOptions;
 use Temporal\Workflow;
@@ -38,7 +38,7 @@ class UserWorkflowImpl implements UserWorkflowInterface
 //        return $user;
 //    }
 
-    public function run(array $userData)
+    public function run(UserDTO $userData)
     {
         $activities = Workflow::newActivityStub(
             UserActivitiesInterface::class,
@@ -46,21 +46,21 @@ class UserWorkflowImpl implements UserWorkflowInterface
                 ->withStartToCloseTimeout(60)
                 ->withRetryOptions(
                     RetryOptions::new()
-                        ->withMaximumAttempts(3)
-                        ->withInitialInterval(1)
-                        ->withBackoffCoefficient(2.0)
+                    ->withMaximumAttempts(5)
+                    ->withInitialInterval(\DateInterval::createFromDateString('5 seconds'))
+                    ->withBackoffCoefficient(2.0)
+                    ->withMaximumInterval(\DateInterval::createFromDateString('180 seconds'))
                 )
         );
 
-        $user = yield $activities->createUser($userData);
-        Log::info($user);
-        yield $activities->createContact($user);
+        // $user = yield $activities->createUser($userData);
         yield $activities->createLog(
             "created",
-            $user['id'],
+            $userData->id,
             "users"
         );
+        yield $activities->createContact($userData);
 
-        return $user;
+        return $userData;
     }
 }
