@@ -30,7 +30,7 @@ func (w *ContactLoggingWorkflow) ContactLoggingWorkflow(ctx workflow.Context, lo
 
 	// Run activity 
 	act := activities.NewLoggingActivity()
-	err := workflow.ExecuteActivity(ctx, act.ContactLogging, log).Get(ctx, nil)
+	err := workflow.ExecuteActivity(ctx, act.ContactLoggingActivity, log).Get(ctx, nil)
 	if err != nil {
 		// bisa juga workflow logger
 		workflow.GetLogger(ctx).Error("Activity failed", "error", err)

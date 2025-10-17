@@ -1,5 +1,10 @@
 This is an example of temporal that orchestrate microservice:
 
+## Run temporal server using docker 
+```
+cd temporal
+docker-compose -f docker-compose-postgres.yml up
+```
 
 ## Our Logging Service uses python:
 Make sure you installed:
@@ -26,6 +31,9 @@ go run .
 // Run app with hot reload
 air
 
+// Run the worker
+go run . app/temporal/worker/main.go
+
 ```
 
 ## User Service with Laravel
@@ -33,7 +41,10 @@ air
 // Run composer install
 composer i
 
-// Run the 
-php artisan serve
+// Run the app
+php artisan serve --host=127.0.0.1 --port=3000
+
+// Run the roadrunner
+./rr serve -c .rr.yaml
 
 ```

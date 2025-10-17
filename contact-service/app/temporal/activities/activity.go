@@ -20,7 +20,7 @@ func NewLoggingActivity() *LogActivity {
 	return &LogActivity{BaseURL: base}
 }
 
-func (a *LogActivity) ContactLogging(data any) error {
+func (a *LogActivity) ContactLoggingActivity(data any) error {
 	body, err := json.Marshal(data)
 	if err != nil {
 		return fmt.Errorf("failed to marshal log data: %w", err)

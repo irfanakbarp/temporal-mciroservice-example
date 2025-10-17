@@ -32,6 +32,9 @@ func main() {
 		}
 	}()
 
+
+	// Start worker
+
 	// Listen for the OS signal
 	go func() {
 		<-quit
